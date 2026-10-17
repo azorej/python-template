@@ -68,5 +68,5 @@ If a workflow needs to push commits that should trigger CI:
 ## Security notes
 
 - Never commit secrets; `.env` is git-ignored and unreadable to Claude Code
-  by the shared settings.
+  by the shared settings. Agents see only key names, via `mise run env:keys`.
 - Review repository access, deploy keys and Actions secrets periodically.

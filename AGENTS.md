@@ -52,6 +52,7 @@ mise run ci             # Full CI pipeline in Dagger — exactly what GitHub Act
 mise run ci:selftest    # Tests for the Dagger module itself
 mise run lock           # Upgrade all dependencies in uv.lock
 mise run dagger:develop # Regenerate the Dagger SDK (after a Dagger version bump)
+mise run env:keys       # List key names in .env without values (agents cannot read .env)
 mise tasks              # List every task
 ```
 
@@ -69,6 +70,7 @@ commands — never a raw `python`, `pip`, or `.venv/bin/...`.
 ├── .agents/skills/       # Agent skills (canonical); .claude/skills/ symlinks to them
 ├── .claude/              # Claude Code: shared settings, hooks, subagents
 ├── docs/                 # Guides; docs/plans/ holds implementation plans
+├── mise-tasks/           # File-based mise tasks (longer than a one-liner)
 ├── scripts/              # Standalone helper scripts (not dev tasks — those are mise tasks)
 ├── mise.toml             # Tool versions, env, tasks
 ├── pyproject.toml        # Workspace root: members, dev deps, ruff/pytest config

@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+#MISE description="List key names in .env (or the given file) without their values"
+#USAGE arg "[file]" default=".env" help="dotenv file to inspect"
+set -euo pipefail
+
+# Agents may not read .env (see .claude/settings.json); this exposes only the
+# names, marking keys whose value is empty, so they can tell what is configured.
+file="${usage_file:-.env}"
+
+if [[ ! -f "$file" ]]; then
+  echo "env:keys: $file not found (copy .env.example to .env to start)" >&2
+  exit 1
+fi
+
+awk '
+  # Skip continuation lines of a multi-line quoted value.
+  in_multiline { if (index($0, quote)) in_multiline = 0; next }
+  /^[[:space:]]*(#|$)/ { next }
+  {
+    line = $0
+    sub(/^[[:space:]]*(export[[:space:]]+)?/, "", line)
+    if (!match(line, /^[A-Za-z_][A-Za-z0-9_]*[[:space:]]*=/)) next
+    name = substr(line, 1, RLENGTH)
+    sub(/[[:space:]]*=$/, "", name)
+    value = substr(line, RLENGTH + 1)
+    sub(/^[[:space:]]+/, "", value)
+    quote = substr(value, 1, 1)
+    if ((quote == "\"" || quote == "\x27") && index(substr(value, 2), quote) == 0) in_multiline = 1
+    empty = (value == "" || value == "\"\"" || value == "\x27\x27" || value ~ /^#/)
+    print name (empty ? " (empty)" : "")
+  }
+' "$file"

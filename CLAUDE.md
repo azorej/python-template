@@ -17,7 +17,8 @@ below are the few things specific to Claude.
   above; you rarely need to call them directly.
 - **Hooks** (`.claude/settings.json`): every edited `.py` file is ruff-fixed and
   formatted automatically; unfixable lint findings come back to you — fix them.
-- **Permissions:** `.env` is unreadable and lock files are not editable by
-  design — use `uv add` / `mise run lock`.
+- **Permissions:** `.env` is unreadable (run `mise run env:keys` to see which
+  keys are set) and lock files are not editable by design — use `uv add` /
+  `mise run lock`.
 - Personal overrides go in `.claude/settings.local.json` and `CLAUDE.local.md`
   (both git-ignored).
